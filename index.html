@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Дизайн Человека</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, 'Roboto', monospace;
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            color: #eef5ff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .guru-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .guru-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFD966, #FF8C42, #4A90E2, #50C878);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .sub {
+            font-size: 1rem;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255,215,0,0.3);
+            display: inline-block;
+            padding-top: 0.6rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .tuning-panel {
+            background: rgba(20, 28, 44, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 200, 100, 0.25);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .tuning-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.2rem;
+        }
+
+        .props-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: space-between;
+        }
+
+        .prop-card {
+            flex: 1;
+            min-width: 190px;
+            background: #111827cc;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            border-left: 4px solid;
+            transition: all 0.2s;
+        }
+
+        .prop-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .option-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .opt-btn {
+            background: #1f2a44;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 60px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .opt-btn.active {
+            background: #f4b942;
+            color: #0a0f1e;
+            box-shadow: 0 0 10px rgba(244,185,66,0.5);
+        }
+
+        /* Секция популярных пар */
+        .popular-pairs {
+            background: rgba(15, 22, 40, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1.3rem 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid #f4b94240;
+        }
+
+        .pairs-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .pairs-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .pair-card {
+            background: #0e1628;
+            border-radius: 2rem;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #7f8fa4;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: bold;
+        }
+
+        .pair-card:hover {
+            transform: scale(1.02);
+            background: #1e2a4a;
+            border-color: #f4b942;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .pair-swatch {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .mini-swatch {
+            width: 32px;
+            height: 32px;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px black;
+        }
+
+        .pair-name {
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .pattern-section {
+            margin-bottom: 2rem;
+        }
+
+        .pattern-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            margin: 1rem 0 1.5rem;
+        }
+
+        .pattern-btn {
+            background: #19223c;
+            padding: 10px 24px;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: 1px solid #4f6390;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .pattern-btn.active-pattern {
+            background: #ca6f3e;
+            border-color: #ffbc6e;
+            color: white;
+            box-shadow: 0 0 12px #ff9f4a;
+        }
+
+        .perception-map {
+            background: #0b1020dd;
+            border-radius: 2rem;
+            padding: 1.8rem;
+            margin: 1.2rem 0;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(210, 180, 140, 0.4);
+        }
+
+        .color-shift-comparison {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .color-palette {
+            flex: 1;
+            background: #00000033;
+            border-radius: 1.5rem;
+            padding: 1rem;
+        }
+
+        .color-palette h4 {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .swatch-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .swatch {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.7rem;
+            text-shadow: 0 1px 0 black;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .location-hint {
+            background: #1a1f2e;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            border-left: 6px solid #f7b05e;
+        }
+
+        .city-guide {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .guide-card {
+            background: #00000055;
+            padding: 0.6rem 1rem;
+            border-radius: 1.2rem;
+            flex: 1;
+            min-width: 170px;
+            font-size: 0.85rem;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.75rem;
+            margin-top: 2rem;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 780px) {
+            .props-grid { flex-direction: column; }
+            .color-shift-comparison { flex-direction: column; }
+            .swatch { width: 55px; height: 55px; }
+            .pair-card { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="guru-header">
+        <h1>⚡ ДИЗАЙН ЧЕЛОВЕКА ⚡</h1>
+        <div class="sub">【 Путь Света 】Тибетский буддизм • Синий 🔵 Красный 🔴 Жёлтый 🟡 Зелёный 🟢 Оранжевый 🟠</div>
+        <div style="margin-top: 6px; font-size:0.8rem;">AI-обучение • Смена паттернов • Инверсия и навигация по городам</div>
+    </div>
+
+    <!-- Панель свойств (цвет, звук, счёт, настроение) -->
+    <div class="tuning-panel">
+        <div class="tuning-title">
+            🎛️ ТЮНИНГ ВОСПРИЯТИЯ 🎛️
+            <span>3–4 свойства</span>
+        </div>
+        <div class="props-grid">
+            <div class="prop-card" style="border-left-color: #5a7d9a;">
+                <h3>🎨 ЦВЕТ</h3>
+                <div class="option-buttons" id="color-buttons">
+                    <button data-color="синий" class="opt-btn" style="background:#2c5282;">🔵 Синий</button>
+                    <button data-color="красный" class="opt-btn" style="background:#b91c1c;">🔴 Красный</button>
+                    <button data-color="жёлтый" class="opt-btn" style="background:#d69e2e;">🟡 Жёлтый</button>
+                    <button data-color="зелёный" class="opt-btn" style="background:#2f855a;">🟢 Зелёный</button>
+                    <button data-color="оранжевый" class="opt-btn" style="background:#dd6b20;">🟠 Оранжевый</button>
+                </div>
+            </div>
+            <div class="prop-card" style="border-left-color: #9f7aea;">
+                <h3>🎧 ЗВУК (слух)</h3>
+                <div class="option-buttons" id="sound-buttons">
+                    <button data-sound="тишина" class="opt-btn">🌙 Тишина</button>
+                    <button data-sound="глубокий тон" class="opt-btn">🔊 Глубокий тон</button>
+                    <button data-sound="мелодия колоколов" class="opt-btn">🔔 Колокола</button>
+                    <button data-sound="мантра 108" class="opt-btn">🕉️ Мантра</button>
+                </div>
+            </div>
+            <div class="prop-card" style="border-left-color: #48bb78;">
+                <h3>🔢 СЧЁТ / КОД</h3>
+                <div class="option-buttons" id="count-buttons">
+                    <button data-count="123" class="opt-btn">123 (триада)</button>
+                    <button data-count="1234" class="opt-btn">1234 (квадрат)</button>
+                    <button data-count="666" class="opt-btn">666 🔻</button>
+                    <button data-count="999" class="opt-btn">999 ✨</button>
+                </div>
+            </div>
+            <div class="prop-card" style="border-left-color: #f687b3;">
+                <h3>🌀 НАСТРОЕНИЕ</h3>
+                <div class="option-buttons" id="mood-buttons">
+                    <button data-mood="гармония" class="opt-btn">🌿 Гармония</button>
+                    <button data-mood="инверсия-настроения" class="opt-btn">🔄 Инверсия чувств</button>
+                    <button data-mood="поток света" class="opt-btn">✨ Поток света</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- НОВАЯ СЕКЦИЯ: ПОПУЛЯРНЫЕ ПАРЫ (зелёный-красный, синий-жёлтый, оранжевый-зелёный + МОРСКОЙ-РОЗОВЫЙ) -->
+    <div class="popular-pairs">
+        <div class="pairs-title">
+            🌟 ПОПУЛЯРНЫЕ ПАРЫ ДЛЯ ТЮНИНГА 🌟
+            <span style="font-size:0.8rem;">(быстрая смена цветового баланса)</span>
+        </div>
+        <div class="pairs-grid" id="popularPairsContainer">
+            <div class="pair-card" data-pair="green-red">
+                <div class="pair-swatch">
+                    <div class="mini-swatch" style="background:#2f855a;"></div>
+                    <div class="mini-swatch" style="background:#b91c1c;"></div>
+                </div>
+                <div class="pair-name">🟢 ЗЕЛЁНЫЙ ⇄ КРАСНЫЙ 🔴</div>
+                <span style="font-size:0.7rem; opacity:0.8;">(контраст стихий)</span>
+            </div>
+            <div class="pair-card" data-pair="blue-yellow">
+                <div class="pair-swatch">
+                    <div class="mini-swatch" style="background:#2c5282;"></div>
+                    <div class="mini-swatch" style="background:#d69e2e;"></div>
+                </div>
+                <div class="pair-name">🔵 СИНИЙ ⇄ ЖЁЛТЫЙ 🟡</div>
+                <span style="font-size:0.7rem; opacity:0.8;">(небо и солнце)</span>
+            </div>
+            <div class="pair-card" data-pair="orange-green">
+                <div class="pair-swatch">
+                    <div class="mini-swatch" style="background:#dd6b20;"></div>
+                    <div class="mini-swatch" style="background:#2f855a;"></div>
+                </div>
+                <div class="pair-name">🟠 ОРАНЖЕВЫЙ ⇄ ЗЕЛЁНЫЙ 🟢</div>
+                <span style="font-size:0.7rem; opacity:0.8;">(огненный & лесной)</span>
+            </div>
+            <!-- НОВАЯ ПАРА: МОРСКОЙ - РОЗОВЫЙ -->
+            <div class="pair-card" data-pair="sea-pink">
+                <div class="pair-swatch">
+                    <div class="mini-swatch" style="background:#1E7F7F;"></div>
+                    <div class="mini-swatch" style="background:#FF69B4;"></div>
+                </div>
+                <div class="pair-name">🌊 МОРСКОЙ ⇄ РОЗОВЫЙ 🌸</div>
+                <span style="font-size:0.7rem; opacity:0.8;">(океанская нежность & интуиция)</span>
+            </div>
+        </div>
+        <div style="font-size:0.75rem; margin-top: 12px; text-align:center; opacity:0.7;">
+            💡 Клик по паре — задаёт новый акцент: для пары "морской-розовый" активируется особый резонанс (основной цвет морской)
+        </div>
+    </div>
+
+    <!-- Паттерны восприятия -->
+    <div class="pattern-section">
+        <div style="text-align: center; font-weight: bold; font-size: 1.3rem;">🧬 ПАТТЕРНЫ ВОСПРИЯТИЯ (Путь Света)</div>
+        <div class="pattern-buttons" id="pattern-selector">
+            <button data-pattern="default" class="pattern-btn">🌅 ПО УМОЛЧАНИЮ</button>
+            <button data-pattern="inversion" class="pattern-btn">🌀 ИНВЕРСИЯ</button>
+            <button data-pattern="roman" class="pattern-btn">🏛️ РИМСКИЙ</button>
+            <button data-pattern="braziliero" class="pattern-btn">🇧🇷 БРАЗИЛЬЕРО</button>
+        </div>
+    </div>
+
+    <!-- Карта цветовых замен и локации -->
+    <div class="perception-map">
+        <h3 style="display: flex; gap: 8px;">🌍 ЗАМЕНА ЦВЕТОВ & ОРИЕНТАЦИЯ В ГОРОДАХ 🌍</h3>
+        <div class="color-shift-comparison" id="colorComparison"></div>
+        <div id="locationMessage" class="location-hint">
+            🧭 <strong>УЛИЦЫ & МЕЖДУНАРОДНЫЙ ДИЗАЙН:</strong> числа 18, 27, ориентиры.
+        </div>
+        <div class="city-guide" id="cityGuide"></div>
+    </div>
+    <footer>
+        🧬 Дизайн Человека • Тибетский буддизм • Путь Света • Пары: зелёный/красный, синий/жёлтый, оранжевый/зелёный, морской/розовый • AI-обучение через инверсии
+    </footer>
+</div>
+
+<script>
+    // ---- СОСТОЯНИЕ ----
+    let userProps = {
+        color: "синий",
+        sound: "тишина",
+        count: "123",
+        mood: "гармония"
+    };
+    let currentPattern = "default";
+
+    // базовые цвета Пути Света
+    const baseColors = ["синий", "красный", "жёлтый", "зелёный", "оранжевый"];
+    const colorHex = {
+        "синий": "#2c5282", "красный": "#b91c1c", "жёлтый": "#d69e2e", "зелёный": "#2f855a", "оранжевый": "#dd6b20",
+        "морской": "#1E7F7F", "розовый": "#FF69B4"
+    };
+    
+    // для отображения морского/розового в подсказках, но основная палитра остается путь света. 
+    // при выборе пары мы меняем основной userProps.color на один из морских оттенков, но это не стандартный путь света,
+    // тем не менее расширяем концепцию: морской и розовый как дополнительные цвета-настроения для тюнинга.
+    // Также добавим в замены для контекста: выбранный цвет влияет на сообщения.
+
+    // Маппинг паттернов (оригинальные замены)
+    const patternMapping = {
+        default: { "синий": "синий", "красный": "красный", "жёлтый": "жёлтый", "зелёный": "зелёный", "оранжевый": "оранжевый" },
+        inversion: { "синий": "оранжевый", "красный": "зелёный", "жёлтый": "сине-фиолетовый", "зелёный": "красный", "оранжевый": "синий" },
+        roman: { "синий": "пурпурный", "красный": "золотой", "жёлтый": "терракотовый", "зелёный": "оливковый", "оранжевый": "медный" },
+        braziliero: { "синий": "бирюзовый", "красный": "жёлто-зелёный", "жёлтый": "оранжево-золотой", "зелёный": "изумрудный", "оранжевый": "коралловый" }
+    };
+    
+    const mappingHex = {
+        default: { "синий":"#2c5282","красный":"#b91c1c","жёлтый":"#d69e2e","зелёный":"#2f855a","оранжевый":"#dd6b20"},
+        inversion: { "синий":"#dd6b20","красный":"#2f855a","жёлтый":"#4c51bf","зелёный":"#b91c1c","оранжевый":"#2c5282"},
+        roman: { "синий":"#7b2cbf","красный":"#d4af37","жёлтый":"#cd7f32","зелёный":"#6b8e23","оранжевый":"#b87333"},
+        braziliero: { "синий":"#40e0d0","красный":"#c0d725","жёлтый":"#ffb347","зелёный":"#50c878","оранжевый":"#ff6f61"}
+    };
+
+    function getLocationHint(pattern, colorVal, countVal) {
+        let baseStr = "";
+        if (pattern === "default") baseStr = "📍 Район Прана-Вихара: улица Лотоса 18, рядом Бодхи-парк. Ориентация по свету без инверсии.";
+        else if (pattern === "inversion") baseStr = "🌀 ИНВЕРСИЯ АКТИВНА: цветообмен смещает перспективу. Ориентир: проспект Зеркал, дом 27. Синий↔оранжевый, красный↔зелёный.";
+        else if (pattern === "roman") baseStr = "🏛️ РИМСКИЙ КВАРТАЛ: Виа дель Коридо 18, форум Августа. Красный ведёт к Золотому дому, жёлтый - к Колизею.";
+        else baseStr = "🇧🇷 БРАЗИЛЬЕРО: Рио-Самба-дром, улица Карнавала, 27. Оранжевый и зелёный создают ритм батукады.";
+        
+        let countEffect = "";
+        if (countVal === "666") countEffect = " • Число 666 активирует «теневой маршрут» — кварталы 18-го измерения.";
+        else if (countVal === "999") countEffect = " • Сакральное 999: открывает путь к воротам 27.";
+        else if (countVal === "1234") countEffect = " • Ритм 1-2-3-4: квадрат Мандалы, 18 и 27 улицы пересекаются.";
+        else countEffect = " • Счёт 123: три шага — улица Трёх Драгоценностей, 18.";
+        
+        let colorExtra = "";
+        if (colorVal === "морской") colorExtra = " | 🌊 Морской оттенок направляет к воде, причал 18-й линии.";
+        else if (colorVal === "розовый") colorExtra = " | 🌸 Розовая аура связана с улицей Цветущих Сакур, дом 27.";
+        return baseStr + countEffect + colorExtra;
+    }
+
+    function updateCityCards() {
+        const container = document.getElementById("cityGuide");
+        const pattern = currentPattern;
+        let cards = [];
+        if (pattern === "default") cards = ["🏙️ Дхарамсала — улица Далай-ламы 18", "🌆 Бангкок — Сукхумвит 27", "🎑 Катманду — Баудханатх, жёлтый маршрут"];
+        else if (pattern === "inversion") cards = ["🔁 Сингапур — Марина-Бэй, номер 18", "🌀 Токио — Сибуя, инверсия цвета, указатель 27", "🔄 Берлин — Улица Зеркал 18"];
+        else if (pattern === "roman") cards = ["🏛️ Рим — Виа дель Корсо 27", "🪙 Афины — Улица Афины 18, звук лиры", "⛲ Карфаген — римские руины, код 1234"];
+        else cards = ["💃 Рио — Авенида Атлантика 18", "🇧🇷 Сальвадор — Пелоуриньо, номер 27", "🎶 Сан-Паулу — Улица Самбы 666"];
+        
+        // если активен морской или розовый — добавим специальные города
+        if (userProps.color === "морской") {
+            cards.push("🌊 Гоа — Пляж Морской Раковины, дом 18", "🏝️ Мальдивы — Атолл Розовых Кораллов, 27");
+        } else if (userProps.color === "розовый") {
+            cards.push("🌸 Киото — Аллея Цветущей Сакуры 27", "💗 Сан-Франциско — Розовый квартал, маршрут 18");
+        }
+        container.innerHTML = cards.map(c => `<div class="guide-card">${c}</div>`).join('');
+    }
+
+    function renderColorShift() {
+        const comparisonDiv = document.getElementById("colorComparison");
+        const pattern = currentPattern;
+        const hexMap = mappingHex[pattern];
+        let originalHtml = `<div class="color-palette"><h4>🎨 БАЗОВАЯ ПАЛИТРА (Путь Света)</h4><div class="swatch-group">`;
+        baseColors.forEach(col => {
+            originalHtml += `<div class="swatch" style="background:${colorHex[col]}"><span>${col}</span></div>`;
+        });
+        originalHtml += `</div></div>`;
+        
+        let transformedHtml = `<div class="color-palette"><h4>🔄 АКТИВНАЯ ЗАМЕНА [${pattern.toUpperCase()}]</h4><div class="swatch-group">`;
+        baseColors.forEach(col => {
+            let newName = patternMapping[pattern][col] || col;
+            let bgColor = hexMap[col] || "#777";
+            transformedHtml += `<div class="swatch" style="background:${bgColor}"><span>${newName}</span></div>`;
+        });
+        transformedHtml += `</div><div style="margin-top:8px; font-size:11px;">🔁 при паттерне <strong>${pattern}</strong> цвета заменяют ориентиры в городах.</div>`;
+        
+        // дополнительно показываем текущий выбранный цвет (включая морской/розовый)
+        let activeColorHint = `<div style="margin-top: 12px; padding: 6px; background: #00000066; border-radius: 20px; text-align:center;">
+        ✨ Активный цвет тюнинга: <span style="display:inline-block; width:20px; height:20px; border-radius:50%; background: ${colorHex[userProps.color] || '#aaa'}; margin:0 6px; vertical-align:middle;"></span> 
+        <strong>${userProps.color.toUpperCase()}</strong> | звук: ${userProps.sound} | код: ${userProps.count}
+        </div>`;
+        transformedHtml += activeColorHint;
+        
+        comparisonDiv.innerHTML = originalHtml + transformedHtml;
+        
+        const locMsg = document.getElementById("locationMessage");
+        locMsg.innerHTML = `🧭 <strong>ОРИЕНТАЦИЯ по КОДАМ 18, 27:</strong> ${getLocationHint(currentPattern, userProps.color, userProps.count)}<br>
+        <span style="font-size:12px;">🎛️ Настроение: ${userProps.mood} | Паттерн ${currentPattern}</span>`;
+        updateCityCards();
+    }
+
+    function setActiveClass(selector, attribute, value) {
+        document.querySelectorAll(selector + " .opt-btn").forEach(btn => {
+            if(btn.getAttribute(attribute) === value) btn.classList.add("active");
+            else btn.classList.remove("active");
+        });
+    }
+
+    // Обработчики популярных пар (включая морской-розовый)
+    function applyPopularPair(pairId) {
+        if (pairId === "green-red") {
+            userProps.color = "зелёный";
+            setActiveClass("#color-buttons", "data-color", "зелёный");
+            renderColorShift();
+            showPairToast("🟢 ЗЕЛЁНЫЙ ⇄ КРАСНЫЙ 🔴 | Баланс земли и огня активирован");
+        } else if (pairId === "blue-yellow") {
+            userProps.color = "синий";
+            setActiveClass("#color-buttons", "data-color", "синий");
+            renderColorShift();
+            showPairToast("🔵 СИНИЙ ⇄ ЖЁЛТЫЙ 🟡 | Пара неба и света — открывает маршруты 18 и 27");
+        } else if (pairId === "orange-green") {
+            userProps.color = "оранжевый";
+            setActiveClass("#color-buttons", "data-color", "оранжевый");
+            renderColorShift();
+            showPairToast("🟠 ОРАНЖЕВЫЙ ⇄ ЗЕЛЁНЫЙ 🟢 | Тропический резонанс, самба-ориентация");
+        } else if (pairId === "sea-pink") {
+            // устанавливаем морской как основной цвет (можно и розовый, но выберем морской для акцента)
+            userProps.color = "морской";
+            // но в стандартных кнопках цвета нет морского, поэтому просто снимаем активный класс с цветовых кнопок
+            document.querySelectorAll("#color-buttons .opt-btn").forEach(btn => btn.classList.remove("active"));
+            renderColorShift();
+            showPairToast("🌊 МОРСКОЙ ⇄ РОЗОВЫЙ 🌸 | Океанический резонанс + розовый канал. Улица Морских Сакур, 18 и 27 встречаются.");
+        }
+    }
+
+    function showPairToast(msg) {
+        let toast = document.createElement("div");
+        toast.innerText = msg;
+        toast.style.position = "fixed";
+        toast.style.bottom = "20px";
+        toast.style.left = "50%";
+        toast.style.transform = "translateX(-50%)";
+        toast.style.backgroundColor = "#f4b942";
+        toast.style.color = "#0a0f1e";
+        toast.style.padding = "10px 24px";
+        toast.style.borderRadius = "60px";
+        toast.style.fontWeight = "bold";
+        toast.style.zIndex = "999";
+        toast.style.fontSize = "0.9rem";
+        toast.style.boxShadow = "0 4px 15px black";
+        toast.style.backdropFilter = "blur(8px)";
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+
+    function bindEvents() {
+        document.querySelectorAll("#color-buttons .opt-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                userProps.color = btn.getAttribute("data-color");
+                setActiveClass("#color-buttons", "data-color", userProps.color);
+                renderColorShift();
+            });
+        });
+        document.querySelectorAll("#sound-buttons .opt-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                userProps.sound = btn.getAttribute("data-sound");
+                setActiveClass("#sound-buttons", "data-sound", userProps.sound);
+                renderColorShift();
+            });
+        });
+        document.querySelectorAll("#count-buttons .opt-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                userProps.count = btn.getAttribute("data-count");
+                setActiveClass("#count-buttons", "data-count", userProps.count);
+                renderColorShift();
+            });
+        });
+        document.querySelectorAll("#mood-buttons .opt-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                userProps.mood = btn.getAttribute("data-mood");
+                setActiveClass("#mood-buttons", "data-mood", userProps.mood);
+                renderColorShift();
+            });
+        });
+        document.querySelectorAll(".pattern-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                currentPattern = btn.getAttribute("data-pattern");
+                document.querySelectorAll(".pattern-btn").forEach(b => b.classList.remove("active-pattern"));
+                btn.classList.add("active-pattern");
+                renderColorShift();
+            });
+        });
+        // Популярные пары
+        document.querySelectorAll(".pair-card").forEach(card => {
+            card.addEventListener("click", (e) => {
+                const pair = card.getAttribute("data-pair");
+                if(pair) applyPopularPair(pair);
+            });
+        });
+        // начальные активные
+        setActiveClass("#color-buttons", "data-color", userProps.color);
+        setActiveClass("#sound-buttons", "data-sound", userProps.sound);
+        setActiveClass("#count-buttons", "data-count", userProps.count);
+        setActiveClass("#mood-buttons", "data-mood", userProps.mood);
+        document.querySelector(".pattern-btn[data-pattern='default']").classList.add("active-pattern");
+    }
+
+    function init() {
+        bindEvents();
+        renderColorShift();
+    }
+    init();
+</script>
+</body>
+</html>
